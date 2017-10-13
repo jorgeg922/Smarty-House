@@ -1,0 +1,116 @@
+/*!
+ * Start Bootstrap - SB Admin (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+/* Global Styles */
+
+/* Top Navigation */
+
+/* Side Navigation */
+
+/* Flot Chart Containers */
+
+.flot-chart {
+    display: block;
+    height: 400px;
+}
+
+.flot-chart-content {
+    width: 100%;
+    height: 100%;
+}
+
+/* Custom Colored Panels */
+
+.huge {
+    font-size: 40px;
+}
+
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green > .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.panel-green > a {
+    color: #5cb85c;
+}
+
+.panel-green > a:hover {
+    color: #3d8b3d;
+}
+
+.panel-red {
+    border-color: #d9534f;
+}
+
+.panel-red > .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.panel-red > a {
+    color: #d9534f;
+}
+
+.panel-red > a:hover {
+    color: #b52b27;
+}
+
+.panel-orange {
+    border-color: #f0ad4e;
+}
+
+.panel-orange > .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.panel-orange > a {
+    color: #f0ad4e;
+}
+
+.panel-orange > a:hover {
+    color: #df8a13;
+}
+.panel-lightblue {
+    border-color: #59b9ff;
+}
+
+.panel-lightblue > .panel-heading {
+    border-color: #59b9ff;
+    color: #fff;
+    background-color: #59b9ff;
+}
+.panel-lightblue > a {
+    color: #59b9ff;
+}
+
+.panel-lightblue > a:hover {
+    color: #55b2f4;
+}
+
+.panel-yellow {
+    border-color: #faffa5;
+}
+
+.panel-yellow > .panel-heading {
+    border-color: #faffa5;
+    color: #fff;
+    background-color: #faffa5;
+}
+.panel-yellow > a {
+    color: #faffa5;
+}
+
+.panel-yellow > a:hover {
+    color: #faff9e;
+}

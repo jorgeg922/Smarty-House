@@ -1,0 +1,418 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Smarty House</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="include/css/bootstrap.min.css" rel="stylesheet">
+    <link href="include/css/sb-admin.css" rel="stylesheet">
+    <link href="include/css/plugins/morris.css" rel="stylesheet">
+    <link href="include/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+    <script src="include/js/jquery.js"></script>
+    <script src="include/js/bootstrap.min.js"></script>
+    <script src="include/js/moment.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+	<script>
+		function doorfeedshow() {
+			var doorfeed = document.getElementById('div-doorfeed');
+			doorfeed.style.display = 'block';
+			
+		};
+		function doorfeedhide() {
+			var doorfeed = document.getElementById('div-doorfeed');
+			doorfeed.style.display = 'none';
+			
+		};
+		
+		function indoorfeedshow() {
+			var indoorfeed = document.getElementById('div-indoorfeed');
+			indoorfeed.style.display = 'block';
+			
+		};
+		function indoorfeedhide() {
+			var indoorfeed = document.getElementById('div-indoorfeed');
+			indoorfeed.style.display = 'none';
+			
+		};
+
+	</script>
+</head>
+
+<body style="background-color: #123456;">
+
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Smarty House <small> Dashboard</small>
+                        </h1>
+                    </div>
+                </div>
+				<div class="row">
+                    <div class="col-lg-3 col-md-3">
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-fw fa-lock fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div align="center" ><h3><strong>Home Alarm</strong></h3></div>
+                                    </div>	
+                                </div>
+								<div align="center" class="row">
+									<font size="4" ><strong>Status: </strong></font><font size="4" id="alarmlabel">Disarmed</font>
+								</div>
+								 <div align="center" class="row">
+                                         <button onClick="alarm('armed');" type="button" class="btn btn-success btn-lg">Arm</button>
+                                        <button onClick="alarm('disarmed');" type="button" class="btn btn-danger btn-lg">Disarm</button>
+                                </div>
+                            </div>
+                        </div>
+						
+			
+						
+												
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <i class="fa fa-lightbulb-o fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div align="center" ><h3><strong>Lights</strong></h3></div>
+                                    </div>
+                                </div>
+								<div align="center" class="row">
+									<input type="range" id="myRange" min="0" max="100" value="60" step="1" onchange="zwave_dimmer(this.value)" />
+									<span id="rangeval">60</span> %
+								</div>
+                                <div align="center" class="row">
+                                        <button type="button" class="btn btn-success btn-lg" onclick="zwave_dimmer(60)">On</button>
+                                        <button type="button" class="btn btn-danger btn-lg" onclick="zwave_dimmer(0)">Off</button>
+                                </div>
+								<br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-2">
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-sun-o fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge" id="vhumidity">21</div>
+                                        <div><h4><strong>Humidity (%)</strong></h4></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="glyphicon glyphicon-tint fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge" id="vmoisture">25</div>
+                                        <div><h4><strong>Moisture Sensor (%)</strong></h4></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+								<h4><strong>Door Video Feed</strong></h4>
+                                <div class="row" align="center">
+                                        <button type="button" onclick="doorfeedshow()" class="btn btn-success btn-lg" id="df-view">View</button>
+                                        <button type="button" onclick="doorfeedhide()" class="btn btn-danger btn-lg" id="df-hide">Hide</button>
+                                </div>
+                            </div>
+                        </div>
+						
+                    </div>
+					
+                    <div class="col-lg-3 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-sun-o fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge" id="vtemperature">73</div>
+                                        <div><h4><strong>Temperature (&degF)</strong></h4></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="glyphicon glyphicon-home fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                       <div class="huge" align="center" id="vdoor">Closed</div>
+										<div><h4><strong>Door/Window Status</strong></h4></div>
+                                    </div>					
+                                </div>
+                            </div>
+                        </div>
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+								<h4><strong>Indoor Video Feed</strong></h4>
+                                <div class="row" align="center">
+                                        <button type="button" onclick="indoorfeedshow()" class="btn btn-success btn-lg" id="df-view">View</button>
+                                        <button type="button" onclick="indoorfeedhide()" class="btn btn-danger btn-lg" id="df-hide">Hide</button>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+					
+					<div class="col-lg-3 col-md-4">
+						<div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="glyphicon glyphicon-home fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div align="center" ><h3><strong>Front Door</strong></h3></div>
+                                    </div>	
+                                </div>
+								<div align="center" class="row">
+									<font size="4" ><strong>Status: </strong></font><font size="4" id="doorlabel">Locked</font>
+								</div>
+								 <div align="center" class="row">
+                                        <button type="button" class="btn btn-success btn-lg" onclick="frontdoor('1');">Lock</button>
+                                        <button type="button" class="btn btn-danger btn-lg" onclick="frontdoor('0');">Unlock</button>
+                                </div>
+                            </div>
+                        </div>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+                               	<div class="row">
+									<div class="col-xs-3">
+										<i class="glyphicon glyphicon-off fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div align="center" ><h3><strong>TV Remote</strong></h3></div>
+									</div>
+								</div>
+								<div align="center" class="row">
+									<button type="button" onClick="tvRemote('power');" class="btn btn-success btn-lg">Power</button><br>
+									<button type="button" onClick="tvRemote('volume up');" class="btn btn-success btn-lg">Vol. Up</button>
+									<button type="button" onClick="tvRemote('channel up');" class="btn btn-danger btn-lg">Chann. Up</button><br>
+									<button type="button" onClick="tvRemote('volume down');" class="btn btn-success btn-lg">Vol. Down</button>
+									<button type="button" onClick="tvRemote('channel down');" class="btn btn-danger btn-lg">Chann. Down</button>
+								</div>
+                            </div>
+                        </div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-3 col-md-3">
+					</div>
+					<div class="col-lg-3 col-md-3">
+						<div id="div-doorfeed" style="display: none;">
+							<div align="center">
+								<iframe align="center" id="frame1" src ="http://192.168.1.217:8081/" width="380" height="250" frameBorder="0"></iframe>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3">
+						<div id="div-indoorfeed" style="display: none;">
+							<div align="center">
+								<iframe align="center" id="frame2" src ="http://192.168.1.72:8081/" width="380" height="250" frameBorder="0"></iframe>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+                               	<div class="row">
+									<div class="col-xs-3">
+										<i class="glyphicon glyphicon-camera fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div align="center" ><h3><strong>Camera Control</strong></h3></div>
+									</div>
+								</div>
+								<div class="row">
+									<table align="center">
+										<tr>
+											<td>
+											</td>
+											<td align="center">
+												<button type="button" onClick="camera('up');" class="btn btn-success btn-lg">Up</button><br>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" onClick="camera('left');" class="btn btn-success btn-lg">Left</button><br>
+											</td>
+											<td>
+												<button type="button" onClick="camera('center');" class="btn btn-danger btn-lg">Center </button>
+											</td>
+											<td>
+												<button type="button" onClick="camera('right');" class="btn btn-success btn-lg">Right</button><br>
+											</td>
+										</tr>
+										<tr>
+											<td>
+											</td>
+											<td align="center">
+												<button type="button" onClick="camera('down');" class="btn btn-success btn-lg">Down</button><br>
+											</td>
+											<td>
+											</td>
+										</tr>
+										
+									</table>
+								
+								</div>
+								<!--
+									<button type="button" onClick="tvRemote('power');" class="btn btn-success btn-lg">Power</button><br>
+									<button type="button" onClick="tvRemote('volume up');" class="btn btn-success btn-lg">Vol. Up</button>
+									<button type="button" onClick="tvRemote('channel up');" class="btn btn-danger btn-lg">Chann. Up</button><br>
+									<button type="button" onClick="tvRemote('volume down');" class="btn btn-success btn-lg">Vol. Down</button>
+									<button type="button" onClick="tvRemote('channel down');" class="btn btn-danger btn-lg">Chann. Down</button>
+								-->
+                            </div>
+                        </div>
+					
+					</div>
+				</div>
+				
+			<!--		<div class="col-lg-3 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa fa-adn fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div align="center" ><h3><strong>Alexa</strong></h3></div>
+                                    </div>
+                                </div>
+                                <div align="center" class="row">
+                                        <button type="button" onClick="alexaOn();" class="btn btn-success btn-lg">Listen</button>
+                                        <button type="button" onClick="alexaOff();" class="btn btn-danger btn-lg">Stop Listening</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			-->	
+		
+
+					
+					<!--
+					<div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="glyphicon glyphicon-home fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+										<div class="huge" align="center" id="vdoor">Closed</div>
+                                    </div>
+                                </div>
+								<div class="row">
+									<div align="center" ><h4><strong>Door/Window Status</strong></h4></div>
+								</div>
+                            </div>
+                        </div>
+					-->	
+				
+
+                </div>
+				<!--
+				<div align="center" class="row">
+					<button type="button" onClick="alexaOn();" class="btn btn-success btn-lg">Listen</button>
+					<button type="button" onClick="alexaOff();" class="btn btn-danger btn-lg">Stop Listening</button>
+					<button type="button" class="btn btn-info btn-lg">Info</button>
+					<button type="button" class="btn btn-warning btn-lg">Warning</button>
+					<button type="button" class="btn btn-danger btn-lg">Danger</button>
+				</div>
+				-->
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">		
+	$("#vmoisture").text("1");
+        var socket = io.connect('192.168.1.217:1991');
+          socket.on('connect', function () {
+            socket.on('mqtt', function (msg) {
+            if(msg.topic === '/temperature') {
+				console.log("Temperature: " + msg.payload);
+				$("#vtemperature").text(msg.payload);
+			}     
+            if(msg.topic === '/moisture') {
+				console.log("Moisutre: " + msg.payload);
+				$("#vmoisture").text(msg.payload);
+            }
+			if(msg.topic === '/humidity') {
+				console.log("Humidity: " + msg.payload);
+				$("#vhumidity").text(msg.payload);
+            }
+			if(msg.topic === '/door') {
+				$("#vdoor").text(msg.payload);
+            }
+			if(msg.topic === '/DoorLock') {
+				if(msg.payload == 1)
+					newtext = "Locked";
+				if(msg.payload == 0)
+					newtext = "Unlocked";
+				$("#doorlabel").text(newtext);
+            }
+			if(msg.topic === '/alarm') {
+				if(msg.payload == "armed")
+					newalarmtext = "Armed";
+				if(msg.payload == "disarmed")
+					newalarmtext = "Disarmed";
+				if(msg.payload == "Triggered")
+					newalarmtext = "Triggered";
+				$("#alarmlabel").text(newalarmtext);
+            }
+			if(msg.topic === '/dimmer') {
+				document.getElementById("rangeval").innerHTML=String(msg.payload);
+				document.getElementById("myRange").value = String(msg.payload);
+            }
+            });
+          });
+		  
+		  function frontdoor(command){
+				socket.emit('/DoorLock', String(command));
+		  }
+		  function zwave_dimmer(val){
+				document.getElementById("rangeval").innerHTML=val;
+				socket.emit('/dimmer', String(val));
+				document.getElementById("myRange").value = String(val);
+		  }
+		  function tvRemote(command){
+				socket.emit('/tvremote', String(command));
+		  }
+		  function camera(command){
+				socket.emit('/camera', String(command));
+		  }
+		  function alarm(command){
+				socket.emit('/alarm', String(command));
+		  }
+    </script>
+</html>
